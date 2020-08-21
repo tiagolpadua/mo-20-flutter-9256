@@ -1,7 +1,7 @@
 import 'package:bytebank/models/transferencia.dart';
 import 'package:flutter/material.dart';
 
-import 'formulario_transferencia.dart';
+import 'formulario.dart';
 
 class ListaTransferencias extends StatefulWidget {
   final List<Transferencia> _transferencias = List();
@@ -27,28 +27,24 @@ class _ListaTransferenciasState extends State<ListaTransferencias> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
-          final Future<Transferencia> future = Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return FomularioTransferencia();
-              },
-            ),
-          );
-          future.then(
-            (Transferencia transferenciaCriada) {
-              debugPrint('Voltou pra tela inicial: $transferenciaCriada');
-              // 1 - Quando volta sem criar transf dá crash, verificar se não é
-              //     nulo
-              if (transferenciaCriada != null) {
-                setState(() {
-                  widget._transferencias.add(transferenciaCriada);
-                });
-              }
-            },
-          );
-        },
+
+        // 0 - Criar pacote screens.transferencia e mover
+        //     arquivo formulario e lista
+
+        // ALT+ENTER
+        // 1 - Refatorar métodos para expression body
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FomularioTransferencia(),
+          ),
+        ).then(
+          (transferenciaCriada) {
+            if (transferenciaCriada != null) {
+              setState(() => widget._transferencias.add(transferenciaCriada));
+            }
+          },
+        ),
       ),
     );
   }

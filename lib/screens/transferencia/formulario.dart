@@ -10,32 +10,40 @@ class FomularioTransferencia extends StatefulWidget {
 class _FomularioTransferenciaState extends State<FomularioTransferencia> {
   final TextEditingController _controladorCampoNumeroConta =
   TextEditingController();
-
   final TextEditingController _controladorCampoValor = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    // CTRL+ALT+V
+    // 2 - Refatorar removendo "Strings livres"
+    const _tituloAppBar = 'Criando Transferência';
+    const _rotuloCampoValor = 'Valor';
+    const _dicaCampoValor = '0.00';
+    const _rotuloCampoNumeroConta = 'Número da Conta';
+    const _dicaCampoNumeroConta = '0000';
+    const _textoBotaoConfirmar = 'Confirmar';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Criando Transferência'),
+        title: Text(_tituloAppBar),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Editor(
               controladorCampo: _controladorCampoNumeroConta,
-              rotulo: 'Número da Conta',
-              dica: '0000',
+              rotulo: _rotuloCampoNumeroConta,
+              dica: _dicaCampoNumeroConta,
             ),
             Editor(
               controladorCampo: _controladorCampoValor,
-              rotulo: 'Valor',
-              dica: '0.00',
+              rotulo: _rotuloCampoValor,
+              dica: _dicaCampoValor,
               icone: Icons.monetization_on,
             ),
             Builder(builder: (context) {
               return RaisedButton(
-                child: Text('Confirmar'),
+                child: Text(_textoBotaoConfirmar),
                 onPressed: () => _criarTransferencia(context),
               );
             }),
