@@ -1,6 +1,8 @@
 import 'package:bytebank/models/transferencia.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
+import '../../main.dart';
 import 'formulario.dart';
 
 class ListaTransferencias extends StatefulWidget {
@@ -18,6 +20,16 @@ class _ListaTransferenciasState extends State<ListaTransferencias> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Transferências'),
+        actions: <Widget>[
+          // 2 - Consumir o ScopedModel
+          ScopedModelDescendant<DarkModeModel>(
+              builder: (context, child, model) {
+            return IconButton(
+              icon: Icon(Icons.lightbulb_outline),
+              onPressed: () => model.toggle(),
+            );
+          }),
+        ],
       ),
       body: ListView.builder(
         itemCount: widget._transferencias.length,
