@@ -1,3 +1,5 @@
+import 'package:bytebank/screens/contact/list.dart';
+import 'package:bytebank/screens/dashboard/dashboard.dart';
 import 'package:bytebank/screens/transferencia/lista.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -23,17 +25,13 @@ void main() {
 class BytebankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // 1 - Cria o ScopedModel
     return ScopedModel<DarkModeModel>(
       model: DarkModeModel(),
-
-      // 3 - Envolver MaterialApp em um ScopedModelDescendant para
-      //     pegar o model
       child: ScopedModelDescendant<DarkModeModel>(
         builder: (context, child, model) {
           return MaterialApp(
             theme: model.darkmode ? ThemeData.dark() : temaDefault(),
-            home: ListaTransferencias(),
+            home: Dashboard(),
           );
         },
       ),
@@ -48,9 +46,6 @@ ThemeData temaDefault() {
     buttonTheme: ButtonThemeData(
       buttonColor: Colors.blueAccent[700],
       textTheme: ButtonTextTheme.primary,
-    ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      foregroundColor: Colors.blueAccent[700],
     ),
   );
 }

@@ -89,7 +89,7 @@ packages:
     source: hosted
     version: "1.7.0"
   scoped_model:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: scoped_model
       url: "https://pub.dartlang.org"
