@@ -1,6 +1,8 @@
 import 'package:bytebank/models/contact.dart';
 import 'package:flutter/material.dart';
 
+import 'detalha.dart';
+
 // 1 -Converter ConctactForm para  StatefulWidget (ALT+ENTER)
 class ConctactForm extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class _ConctactFormState extends State<ConctactForm> {
         child: Column(
           children: [
             TextField(
+              // Vinculou os controllers
               controller: _nameController,
               decoration: InputDecoration(
                 labelText: 'Full Name',
@@ -57,13 +60,13 @@ class _ConctactFormState extends State<ConctactForm> {
                         int.tryParse(_accountNumberController.text);
                     if (name != null && name.length > 0 && accountNumber != null) {
                       final Contact newContact = Contact(name, accountNumber);
-                       Navigator.pop(context, newContact);
-//                      Navigator.push(
-//                        context,
-//                        MaterialPageRoute(
-//                          builder: (context) => DetalhaContato(newContact),
-//                        ),
-//                      );
+//                       Navigator.pop(context, newContact);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetalhaContato(newContact),
+                        ),
+                      );
                     }
                   },
                 ),
