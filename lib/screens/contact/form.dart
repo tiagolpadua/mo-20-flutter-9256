@@ -1,7 +1,6 @@
+import 'package:bytebank/database/app_database.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:flutter/material.dart';
-
-import 'detalha.dart';
 
 // 1 -Converter ConctactForm para  StatefulWidget (ALT+ENTER)
 class ConctactForm extends StatefulWidget {
@@ -10,8 +9,6 @@ class ConctactForm extends StatefulWidget {
 }
 
 class _ConctactFormState extends State<ConctactForm> {
-
-  // 2 - Criar os controllers para cada campo
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _accountNumberController =
       TextEditingController();
@@ -53,19 +50,21 @@ class _ConctactFormState extends State<ConctactForm> {
                 child: RaisedButton(
                   child: Text('Create'),
                   onPressed: () {
-                    // 4 - Implementar captura e validação de informações da tela
-//                  //     e criar a classe Contact no arquivo contact.dart
                     final String name = _nameController.text;
                     final int accountNumber =
                         int.tryParse(_accountNumberController.text);
-                    if (name != null && name.length > 0 && accountNumber != null) {
-                      final Contact newContact = Contact(name, accountNumber);
-//                       Navigator.pop(context, newContact);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetalhaContato(newContact),
-                        ),
+                    if (name != null &&
+                        name.length > 0 &&
+                        accountNumber != null) {
+                      final Contact newContact =
+                          Contact(0, name, accountNumber);
+
+                      // 4 - Realizar persistência no form
+                      save(newContact).then(
+                        (id) {
+                          debugPrint('id do elemento salvo: $id');
+                          Navigator.pop(context, newContact);
+                        },
                       );
                     }
                   },
@@ -78,7 +77,6 @@ class _ConctactFormState extends State<ConctactForm> {
     );
   }
 
-  // 3 - Criar o dispose para os controllers
   void dispose() {
     debugPrint("Chamou o dispose do _ConctactFormState");
     _nameController.dispose();
