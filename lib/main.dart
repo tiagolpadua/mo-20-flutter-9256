@@ -2,8 +2,6 @@ import 'package:bytebank/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-import 'database/app_database.dart';
-
 class DarkModeModel extends Model {
   bool _darkmode = false;
 
@@ -20,9 +18,6 @@ void main() {
   runApp(
     BytebankApp(),
   );
-
-  // Chamar createDatabase
-  createDatabase();
 }
 
 class BytebankApp extends StatelessWidget {

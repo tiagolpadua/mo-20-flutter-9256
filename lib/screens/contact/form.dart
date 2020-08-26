@@ -1,8 +1,7 @@
-import 'package:bytebank/database/app_database.dart';
+import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:flutter/material.dart';
 
-// 1 -Converter ConctactForm para  StatefulWidget (ALT+ENTER)
 class ConctactForm extends StatefulWidget {
   @override
   _ConctactFormState createState() => _ConctactFormState();
@@ -12,6 +11,7 @@ class _ConctactFormState extends State<ConctactForm> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _accountNumberController =
       TextEditingController();
+  final ContactDao _dao = ContactDao();
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +59,8 @@ class _ConctactFormState extends State<ConctactForm> {
                       final Contact newContact =
                           Contact(0, name, accountNumber);
 
-                      // 4 - Realizar persistência no form
-                      save(newContact).then(
-                        (id) {
-                          debugPrint('id do elemento salvo: $id');
-                          Navigator.pop(context, newContact);
-                        },
+                      _dao.save(newContact).then(
+                        (id) => Navigator.pop(context, newContact),
                       );
                     }
                   },
