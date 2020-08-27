@@ -1,13 +1,11 @@
-import 'package:bytebank/models/transferencia.dart';
+import 'package:bytebank/http/webclient.dart';
+import 'package:bytebank/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../../main.dart';
-import 'formulario.dart';
 
 class ListaTransferencias extends StatefulWidget {
-  final List<Transferencia> _transferencias = List();
-
   @override
   _ListaTransferenciasState createState() => _ListaTransferenciasState();
 }
@@ -15,13 +13,10 @@ class ListaTransferencias extends StatefulWidget {
 class _ListaTransferenciasState extends State<ListaTransferencias> {
   @override
   Widget build(BuildContext context) {
-    debugPrint('build ListaTransferencias!');
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Transferências'),
+        title: Text('Transactions'),
         actions: <Widget>[
-          // 2 - Consumir o ScopedModel
           ScopedModelDescendant<DarkModeModel>(
               builder: (context, child, model) {
             return IconButton(
@@ -31,30 +26,33 @@ class _ListaTransferenciasState extends State<ListaTransferencias> {
           }),
         ],
       ),
-      body: ListView.builder(
-        itemCount: widget._transferencias.length,
-        itemBuilder: (context, indice) {
-          return ItemTransferencia(widget._transferencias[indice]);
+      // 2 - Utilizar o FutureBuilder
+      body: FutureBuilder<List<Transaction>>(
+        future: findAll(),
+        builder: (context, snapshot) {
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, indice) {
+              return ItemTransferencia(snapshot.data[indice]);
+            },
+          );
         },
       ),
-
-      // 1 - Remover o FloatingActionButton
-
     );
   }
 }
 
 class ItemTransferencia extends StatelessWidget {
-  final Transferencia _transferencia;
+  final Transaction _transaction;
 
-  ItemTransferencia(this._transferencia);
+  ItemTransferencia(this._transaction);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text(_transferencia.valor.toString()),
-        subtitle: Text(_transferencia.numeroConta.toString()),
+        title: Text(_transaction.value.toString()),
+        subtitle: Text(_transaction.contact.accountNumber.toString()),
         leading: Icon(Icons.monetization_on),
       ),
     );

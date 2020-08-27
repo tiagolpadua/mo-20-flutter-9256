@@ -1,5 +1,5 @@
 import 'package:bytebank/components/editor.dart';
-import 'package:bytebank/models/transferencia.dart';
+import 'package:bytebank/models/transaction.dart';
 import 'package:flutter/material.dart';
 
 class FomularioTransferencia extends StatefulWidget {
@@ -14,8 +14,6 @@ class _FomularioTransferenciaState extends State<FomularioTransferencia> {
 
   @override
   Widget build(BuildContext context) {
-    // CTRL+ALT+V
-    // 2 - Refatorar removendo "Strings livres"
     const _tituloAppBar = 'Criando Transferência';
     const _rotuloCampoValor = 'Valor';
     const _dicaCampoValor = '0.00';
@@ -66,7 +64,7 @@ class _FomularioTransferenciaState extends State<FomularioTransferencia> {
     final double valor = double.tryParse(_controladorCampoValor.text);
 
     if (numeroConta != null && valor != null) {
-      final transferenciaCriada = Transferencia(valor, numeroConta);
+      final transferenciaCriada = Transaction(valor, null);
       debugPrint('$transferenciaCriada');
       Navigator.pop(context, transferenciaCriada);
     } else {

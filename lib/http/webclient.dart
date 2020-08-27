@@ -1,14 +1,35 @@
-import 'package:http/http.dart';
+import 'dart:convert';
 
-// 1 - Incluir dependencia http no pubspec.yaml
-// 2 - Criar arquivo webclient.dart na pasta http
-// 3 - Implementar findAll
-// 4 - Chamar findAll no main
-// 5 - Porquê não funciona?
-void findAll() {
-  print('Chamou findAll!');
-  get('http://192.168.0.100:8080/transactions')
-      .then((resp) {
-    print('resp.body: ${resp.body}');
-  });
+import 'package:bytebank/models/contact.dart';
+import 'package:bytebank/models/transaction.dart';
+import 'package:http/http.dart';
+import 'package:http_interceptor/http_client_with_interceptor.dart';
+
+import 'logging_interceptor.dart';
+
+// 1 - Ajustar tipo de retorno
+Future<List<Transaction>> findAll() async {
+  Client client = HttpClientWithInterceptor.build(interceptors: [
+    LoggingInterceptor(),
+  ]);
+
+  final Response response =
+      await client.get('http://192.168.0.100:8080/transactions');
+
+  final List<dynamic> transactionJson = jsonDecode(response.body);
+  final List<Transaction> transactions = List();
+
+  for (Map<String, dynamic> element in transactionJson) {
+    Transaction transaction = Transaction(
+      element['value'],
+      Contact(
+        0,
+        element['contact']['name'],
+        element['contact']['accountNumber'],
+      ),
+    );
+    transactions.add(transaction);
+  }
+
+  return transactions;
 }
