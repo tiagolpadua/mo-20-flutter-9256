@@ -1,6 +1,9 @@
 import 'package:bytebank/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:scoped_model/scoped_model.dart';
+
+import 'http/webclient.dart';
 
 class DarkModeModel extends Model {
   bool _darkmode = false;
@@ -18,6 +21,8 @@ void main() {
   runApp(
     BytebankApp(),
   );
+
+  findAll();
 }
 
 class BytebankApp extends StatelessWidget {

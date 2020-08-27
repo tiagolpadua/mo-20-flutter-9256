@@ -9,7 +9,6 @@ class ContactDao {
       '$_name TEXT, '
       '$_accountNumber INTEGER)';
 
-  // 3 - Extrair strings livres
   static const String _tableName = 'contacts';
   static const String _id = 'id';
   static const String _name = 'name';
@@ -21,7 +20,6 @@ class ContactDao {
     return db.insert(_tableName, contactMap);
   }
 
-  // 1 - Extrair _toMap
   Map<String, dynamic> _toMap(Contact contact) {
     final Map<String, dynamic> contactMap = Map();
     contactMap[_name] = contact.name;
@@ -35,7 +33,6 @@ class ContactDao {
     return _toList(result);
   }
 
-  // 2 - Extrair _toList
   List<Contact> _toList(List<Map<String, dynamic>> result) {
     final List<Contact> contacts = List();
     for (Map<String, dynamic> map in result) {

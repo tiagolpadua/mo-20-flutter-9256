@@ -37,27 +37,9 @@ class _ListaTransferenciasState extends State<ListaTransferencias> {
           return ItemTransferencia(widget._transferencias[indice]);
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
 
-        // 0 - Criar pacote screens.transferencia e mover
-        //     arquivo formulario e lista
+      // 1 - Remover o FloatingActionButton
 
-        // ALT+ENTER
-        // 1 - Refatorar métodos para expression body
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => FomularioTransferencia(),
-          ),
-        ).then(
-          (transferenciaCriada) {
-            if (transferenciaCriada != null) {
-              setState(() => widget._transferencias.add(transferenciaCriada));
-            }
-          },
-        ),
-      ),
     );
   }
 }

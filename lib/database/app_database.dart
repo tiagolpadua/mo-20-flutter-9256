@@ -7,6 +7,7 @@ import 'dao/contact_dao.dart';
 Future<Database> getDatabase() async {
   final String dbPath = await getDatabasesPath();
   final String path = join(dbPath, 'bytebank.db');
+  debugPrint('path: $path');
   return openDatabase(
     path,
     onCreate: (db, version) {

@@ -16,13 +16,15 @@ class _ContactsListState extends State<ContactsList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contacts'),
+        title: Text('Transfer'),
       ),
       body: FutureBuilder<List<Contact>>(
-          future:
-              Future.delayed(Duration(seconds: 1)).then((value) => _dao.findAll()),
+          // future: Future.delayed(Duration(seconds: 1)).then((value) => _dao.findAll()),
+          future: _dao.findAll(),
           builder: (context, snapshot) {
             debugPrint('snapshot.connectionState: ${snapshot.connectionState}');
+            debugPrint('snapshot.connectionState: ${snapshot.data}');
+
             switch (snapshot.connectionState) {
               case ConnectionState.none:
                 break;
