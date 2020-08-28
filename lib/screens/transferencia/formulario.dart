@@ -1,15 +1,23 @@
 import 'package:bytebank/components/editor.dart';
+import 'package:bytebank/http/webclients/transaction_webclient.dart';
+import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/models/transaction.dart';
 import 'package:flutter/material.dart';
 
+// CTRL + ALT + o
+// 4 - Corrigir  FomularioTransferencia e ListaTransferencia para utilizar
+//     o TransactionWebClient
 class FomularioTransferencia extends StatefulWidget {
+  final Contact contact;
+  final TransactionWebClient _webClient = TransactionWebClient();
+
+  FomularioTransferencia(this.contact);
+
   @override
   _FomularioTransferenciaState createState() => _FomularioTransferenciaState();
 }
 
 class _FomularioTransferenciaState extends State<FomularioTransferencia> {
-  final TextEditingController _controladorCampoNumeroConta =
-  TextEditingController();
   final TextEditingController _controladorCampoValor = TextEditingController();
 
   @override
@@ -17,8 +25,6 @@ class _FomularioTransferenciaState extends State<FomularioTransferencia> {
     const _tituloAppBar = 'Criando Transferência';
     const _rotuloCampoValor = 'Valor';
     const _dicaCampoValor = '0.00';
-    const _rotuloCampoNumeroConta = 'Número da Conta';
-    const _dicaCampoNumeroConta = '0000';
     const _textoBotaoConfirmar = 'Confirmar';
 
     return Scaffold(
@@ -28,10 +34,21 @@ class _FomularioTransferenciaState extends State<FomularioTransferencia> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Editor(
-              controladorCampo: _controladorCampoNumeroConta,
-              rotulo: _rotuloCampoNumeroConta,
-              dica: _dicaCampoNumeroConta,
+            Text(
+              widget.contact.name,
+              style: TextStyle(
+                fontSize: 24.0,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Text(
+                widget.contact.accountNumber.toString(),
+                style: TextStyle(
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             Editor(
               controladorCampo: _controladorCampoValor,
@@ -53,20 +70,23 @@ class _FomularioTransferenciaState extends State<FomularioTransferencia> {
 
   void dispose() {
     debugPrint("Chamou o dispose do FomularioTransferencia");
-    _controladorCampoNumeroConta.dispose();
     _controladorCampoValor.dispose();
     super.dispose();
   }
 
   void _criarTransferencia(BuildContext context) {
     debugPrint("cliclou em confirmar!");
-    final int numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
     final double valor = double.tryParse(_controladorCampoValor.text);
+    if (valor != null) {
+      final transferenciaCriada = Transaction(valor, widget.contact);
 
-    if (numeroConta != null && valor != null) {
-      final transferenciaCriada = Transaction(valor, null);
-      debugPrint('$transferenciaCriada');
-      Navigator.pop(context, transferenciaCriada);
+      widget._webClient.save(transferenciaCriada).then(
+        (transaction) {
+          if (transaction != null) {
+            Navigator.pop(context);
+          }
+        },
+      );
     } else {
       final snackBar = SnackBar(
         content: Text('Valores Inválidos!'),

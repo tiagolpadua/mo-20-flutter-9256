@@ -1,9 +1,6 @@
 import 'package:bytebank/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:scoped_model/scoped_model.dart';
-
-import 'http/webclient.dart';
 
 class DarkModeModel extends Model {
   bool _darkmode = false;
@@ -17,12 +14,12 @@ class DarkModeModel extends Model {
   }
 }
 
+
+// 1 - Remover o save do main
 void main() {
   runApp(
     BytebankApp(),
   );
-
-  findAll();
 }
 
 class BytebankApp extends StatelessWidget {

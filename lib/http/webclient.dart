@@ -1,35 +1,14 @@
-import 'dart:convert';
-
-import 'package:bytebank/models/contact.dart';
-import 'package:bytebank/models/transaction.dart';
-import 'package:http/http.dart';
 import 'package:http_interceptor/http_client_with_interceptor.dart';
 
 import 'logging_interceptor.dart';
 
-// 1 - Ajustar tipo de retorno
-Future<List<Transaction>> findAll() async {
-  Client client = HttpClientWithInterceptor.build(interceptors: [
-    LoggingInterceptor(),
-  ]);
+// const baseUrl = 'http://192.168.0.100:8080/transactions';
 
-  final Response response =
-      await client.get('http://192.168.0.100:8080/transactions');
+// const baseUrl = 'http://10.0.0.2:8080/transactions';
 
-  final List<dynamic> transactionJson = jsonDecode(response.body);
-  final List<Transaction> transactions = List();
+const baseUrl = 'http://arivaldo.asuscomm.com:8080/transactions';
 
-  for (Map<String, dynamic> element in transactionJson) {
-    Transaction transaction = Transaction(
-      element['value'],
-      Contact(
-        0,
-        element['contact']['name'],
-        element['contact']['accountNumber'],
-      ),
-    );
-    transactions.add(transaction);
-  }
+final client = HttpClientWithInterceptor.build(interceptors: [
+  LoggingInterceptor(),
+]);
 
-  return transactions;
-}

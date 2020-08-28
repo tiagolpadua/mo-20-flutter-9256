@@ -1,6 +1,8 @@
+import 'package:bytebank/components/progress.dart';
 import 'package:bytebank/database/dao/contact_dao.dart';
 import 'package:bytebank/models/contact.dart';
 import 'package:bytebank/screens/contact/form.dart';
+import 'package:bytebank/screens/transferencia/formulario.dart';
 import 'package:flutter/material.dart';
 
 class ContactsList extends StatefulWidget {
@@ -9,7 +11,6 @@ class ContactsList extends StatefulWidget {
 }
 
 class _ContactsListState extends State<ContactsList> {
-
   final ContactDao _dao = ContactDao();
 
   @override
@@ -22,23 +23,11 @@ class _ContactsListState extends State<ContactsList> {
           // future: Future.delayed(Duration(seconds: 1)).then((value) => _dao.findAll()),
           future: _dao.findAll(),
           builder: (context, snapshot) {
-            debugPrint('snapshot.connectionState: ${snapshot.connectionState}');
-            debugPrint('snapshot.connectionState: ${snapshot.data}');
-
             switch (snapshot.connectionState) {
               case ConnectionState.none:
                 break;
               case ConnectionState.waiting:
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                      Text('Loading'),
-                    ],
-                  ),
-                );
+                return Progress();
                 break;
               case ConnectionState.active:
                 break;
@@ -46,7 +35,19 @@ class _ContactsListState extends State<ContactsList> {
                 return ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, indice) {
-                    return _ContactItem(snapshot.data[indice]);
+                    final Contact contact = snapshot.data[indice];
+                    return _ContactItem(
+                      contact,
+                      // 2 - Incluir o click no ContactItem
+                      onClick: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                FomularioTransferencia(contact),
+                          ),
+                        );
+                      },
+                    );
                   },
                 );
                 break;
@@ -67,15 +68,18 @@ class _ContactsListState extends State<ContactsList> {
   }
 }
 
+// 3 - Ajustar o contact Item
 class _ContactItem extends StatelessWidget {
   final Contact contact;
+  final Function onClick;
 
-  const _ContactItem(this.contact);
+  const _ContactItem(this.contact, {@required this.onClick});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: onClick,
         title: Text(
           this.contact.name,
           style: TextStyle(fontSize: 24),
